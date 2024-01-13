@@ -1,0 +1,4 @@
+[32mINFO    [0m root:BASE_MODEL_REQUEST.py:29 Request to https://qauto.forstudy.space/api/users/settings was successful.
+[32mINFO    [0m root:BASE_MODEL_REQUEST.py:30 Response content: {"status":"ok","data":{"currency":"usd","distanceUnits":"ml"}}
+[32mINFO    [0m root:ASERTATION_MODEL.py:12 resposnse: url=<Response [200]>
+[32mINFO    [0m root:ASERTATION_MODEL.py:81 Данные валидные

@@ -1,0 +1,5 @@
+[32mINFO    [0m root:BASE_MODEL_REQUEST.py:15 baseurl: url=https://qauto.forstudy.space/api
+[32mINFO    [0m root:BASE_MODEL_REQUEST.py:29 Request to https://qauto.forstudy.space/api/users/settings was successful.
+[32mINFO    [0m root:BASE_MODEL_REQUEST.py:30 Response content: {"status":"ok","data":{"currency":"usd","distanceUnits":"km"}}
+[32mINFO    [0m root:ASERTATION_MODEL.py:11 resposnse: url=<Response [200]>
+[32mINFO    [0m root:ASERTATION_MODEL.py:37 Validation Pased

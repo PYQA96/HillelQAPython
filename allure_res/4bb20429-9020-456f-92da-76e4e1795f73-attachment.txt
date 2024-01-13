@@ -1,0 +1,1 @@
+Running test_multiply with params 48 -2

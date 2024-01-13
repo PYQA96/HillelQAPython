@@ -1,0 +1,8 @@
+[32mINFO    [0m root:BASE_MODEL_REQUEST.py:15 baseurl: url=https://qauto.forstudy.space/api
+[32mINFO    [0m root:BASE_MODEL_REQUEST.py:29 Request to https://qauto.forstudy.space/api/auth/signup was successful.
+[32mINFO    [0m root:BASE_MODEL_REQUEST.py:30 Response content: {"status":"ok","data":{"userId":81292,"photoFilename":"default-user.png","distanceUnits":"km","currency":"usd"}}
+[32mINFO    [0m root:BASE_MODEL_REQUEST.py:15 baseurl: url=https://qauto.forstudy.space/api
+[32mINFO    [0m root:BASE_MODEL_REQUEST.py:29 Request to https://qauto.forstudy.space/api/users/current was successful.
+[32mINFO    [0m root:BASE_MODEL_REQUEST.py:30 Response content: {"status":"ok","data":{"userId":81292,"currency":"usd","distanceUnits":"km","photoFilename":"default-user.png"}}
+[32mINFO    [0m root:ASERTATION_MODEL.py:11 resposnse: url=<Response [200]>
+[32mINFO    [0m root:ASERTATION_MODEL.py:37 Validation Pased

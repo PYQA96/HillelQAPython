@@ -1,0 +1,5 @@
+[32mINFO    [0m root:BASE_MODEL_REQUEST.py:15 baseurl: url=https://qauto.forstudy.space/api
+[32mINFO    [0m root:BASE_MODEL_REQUEST.py:35 Error in making request to https://qauto.forstudy.space/api/auth/signup: 400 Client Error: Bad Request for url: https://qauto.forstudy.space/api/auth/signup
+[32mINFO    [0m root:BASE_MODEL_REQUEST.py:36 Response content: {"status":"error","message":"User already exists"}
+[32mINFO    [0m root:ASERTATION_MODEL.py:11 resposnse: url=<Response [400]>
+[32mINFO    [0m root:ASERTATION_MODEL.py:37 Validation Pased
