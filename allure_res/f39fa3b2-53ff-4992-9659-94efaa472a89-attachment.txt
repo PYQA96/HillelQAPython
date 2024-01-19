@@ -1,3 +1,0 @@
-Running test_negative_results_tiping with params (2, 'test')
--Ошибка ввода повторите: <class 'ValueError'>
--Ошибка ввода: -Тип данных не число

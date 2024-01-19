@@ -1,4 +1,0 @@
-[32mINFO    [0m root:BASE_MODEL_REQUEST.py:35 Error in making request to https://qauto.forstudy.space/api/users/profile: 401 Client Error: Unauthorized for url: https://qauto.forstudy.space/api/users/profile
-[32mINFO    [0m root:BASE_MODEL_REQUEST.py:36 Response content: {"status":"error","message":"Not authenticated"}
-[32mINFO    [0m root:ASERTATION_MODEL.py:12 resposnse: url=<Response [401]>
-[32mINFO    [0m root:ASERTATION_MODEL.py:38 Validation Pased

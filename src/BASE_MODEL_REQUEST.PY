@@ -1,22 +1,49 @@
+import os
+
 import requests
 import logging
 import allure
 from src.ASERTATION_MODEL import Assertation_model_methods
+from dotenv import load_dotenv
 
 
+load_dotenv()
+URL_ADRESS =os.getenv("URL_ADRESS")
 class Method_error(Exception):
     pass
+
+
+class RequestContext:
+    def __init__(self, endpoint, method, schema=None, expected_code=None, response=None, actual_code=None,
+                 params=None, headers=None, body=None, log_errors=None, metod_validate=True, obj=None,
+                 parametr=None, model_schema=None, ids=None, massivkey='data'):
+        self.endpoint = endpoint
+        self.method = method
+        self.schema = schema
+        self.expected_code = expected_code
+        self.response = response
+        self.actual_code = actual_code
+        self.params = params
+        self.headers = headers
+        self.body = body
+        self.log_errors = log_errors
+        self.metod_validate = metod_validate
+        self.obj = obj
+        self.parametr = parametr
+        self.model_schema = model_schema
+        self.ids = ids
+        self.massivkey =massivkey
 
 
 class BaseModelRequest:
 
     def __init__(self):
-        self.baseurl = "https://qauto.forstudy.space/api"
+        self.baseurl = URL_ADRESS
         logging.info('baseurl: url={}'.format(f"{self.baseurl}"))
 
-    @allure.step("Male request")
+    @allure.step("Male create_request")
     def __make_request(self, endpoint, method, params=None, headers=None, body=None, logining_errors=False):
-        methods = ["get", "post", "put", "delete"]
+        methods = ['get', 'post', 'put', 'delete', 'head', 'options', 'patch', 'trace']
         if method.lower() not in methods:
             raise Method_error(f"This method is incorrect, method mustbe in {methods}: your method {method}")
 
@@ -32,87 +59,26 @@ class BaseModelRequest:
             return response
         except (requests.exceptions.RequestException, Exception) as e:
             if not logining_errors:
-                logging.info(f"Error in making request to {endpoint}: {e}")
+                logging.info(f"Error in making create_request to {endpoint}: {e}")
                 logging.info(f"Response content: {e.response.content.decode('utf-8')}")
 
             if not logining_errors:
-                logging.error(f"Error in request {e}")
+                logging.error(f"Error in create_request {e}")
                 return e.response
 
             else:
                 raise e
 
-    # @allure.step("Get request {endpoint} {method}")
-    # def request(self, endpoint=None, method=None, schema=None, expected_code=None, response=None, actual_code=None,
-    #             params=None, headers=None, body=None, logining_errors=None):
-    #     request = self.__make_request(endpoint, method, params=params, headers=headers, body=body,
-    #                                   logining_errors=logining_errors)
-    #     Assertation_model_methods(request).assert_validate_status_code(actual_code=actual_code,
-    #                                                                    expected_code=expected_code).asset_validate_jsonschema(
-    #         schema=schema, response=response)
-    #     return request
-
-    @allure.step("Get request {endpoint} {method}")
-    def request(self, endpoint=None, method=None, schema=None, expected_code=None, response=None, actual_code=None,
-                params=None, headers=None, body=None, logining_errors=None, metod_validate=None, obj=None,
-                parametr=None, model_schema=None):
-        request = self.__make_request(endpoint, method, params=params, headers=headers, body=body,
-                                      logining_errors=logining_errors)
-        request = Assertation_model_methods(request).assert_validate_status_code(actual_code=actual_code,
-                                                                                 expected_code=expected_code)
-        if metod_validate is not None and metod_validate.lower() == "pydantic":
-            return request.validate_pydantic(obj=obj, parametr=parametr, model_schema=model_schema)
-        return request.asset_validate_jsonschema(schema=schema, response=response)
-
-
-class User_Api(BaseModelRequest):
-
-    @allure.step("sign_up {endpoint} {method}")
-    def test_post_crate_user(self, body, endpoint="/auth/signup", method="post", schema=None, expected_code=None):
-        return self.request(endpoint=endpoint, method=method, body=body, schema=schema, expected_code=expected_code)
-
-    @allure.step("auntificated_user_data {endpoint} {method}")
-    def test_get_auntificated_user_data(self, headers, endpoint='/users/current', method="get", schema=None,
-                                        expected_code=None):
-        return self.request(headers=headers, endpoint=endpoint, method=method, schema=schema,
-                            expected_code=expected_code)
-
-    @allure.step("auntificated_user_profile {endpoint} {method}")
-    def test_get_auntificated_user_profile(self, headers, endpoint='/users/profile', method="get", schema=None,
-                                           expected_code=None):
-        return self.request(headers=headers, endpoint=endpoint, method=method, schema=schema,
-                            expected_code=expected_code)
-
-    @allure.step("auntificated_user_settings {endpoint} {method}")
-    def test_get_auntificated_user_settings(self, headers, endpoint='/users/settings', method="get", schema=None,
-                                            expected_code=None):
-        return self.request(headers=headers, endpoint=endpoint, method=method, schema=schema,
-                            expected_code=expected_code)
-
-    @allure.step("edits_edits_user_settings {endpoint} {method}")
-    def test_put_edits_user_profile(self, body, headers=None, endpoint="/users/profile", method="put", schema=None,
-                                    expected_code=None,metod_validate=None, obj=None,
-                parametr=None, model_schema=None):
-        return self.request(endpoint=endpoint, method=method, body=body, schema=schema, expected_code=expected_code,
-                            headers=headers,obj=obj, parametr=parametr, model_schema=model_schema,metod_validate=metod_validate)
-
-    @allure.step("edits_user_settings {endpoint} {method}")
-    def test_put_edits_user_settings(self, body, headers=None, endpoint="/users/settings", method="put", schema=None,
-                                     expected_code=None,metod_validate=None, obj=None,
-                parametr=None, model_schema=None):
-        return self.request(endpoint=endpoint, method=method, body=body, schema=schema, expected_code=expected_code,
-                            headers=headers,obj=obj, parametr=parametr, model_schema=model_schema,metod_validate=metod_validate)
-
-    @allure.step("edits_user_email {endpoint} {method}")
-    def test_put_edits_user_email(self, body, headers=None, endpoint="/users/email", method="put", schema=None,
-                                  expected_code=None,metod_validate=None, obj=None,
-                parametr=None, model_schema=None):
-        return self.request(endpoint=endpoint, method=method, body=body, schema=schema, expected_code=expected_code,
-                            headers=headers,obj=obj, parametr=parametr, model_schema=model_schema,metod_validate=metod_validate)
-
-    @allure.step("edits_user_password {endpoint} {method}")
-    def test_put_edits_user_password(self, body, headers=None, endpoint="/users/password", method="put", schema=None,
-                                     expected_code=None,metod_validate=None, obj=None,
-                parametr=None, model_schema=None):
-        return self.request(endpoint=endpoint, method=method, body=body, schema=schema, expected_code=expected_code,
-                            headers=headers,obj=obj, parametr=parametr, model_schema=model_schema,metod_validate=metod_validate)
+    @allure.step("create_request")
+    def create_request(self, context):
+        allure.attach(context.endpoint, name="Endpoint", attachment_type=allure.attachment_type.TEXT)
+        allure.attach(context.method, name="Method", attachment_type=allure.attachment_type.TEXT)
+        request = self.__make_request(endpoint=context.endpoint, method=context.method, params=context.params,
+                                      headers=context.headers, body=context.body,
+                                      logining_errors=context.log_errors)
+        request = Assertation_model_methods(request).assert_validate_status_code(actual_code=context.actual_code,
+                                                                                 expected_code=context.expected_code)
+        if not context.metod_validate:
+            return request.validate_pydantic(obj=context.obj, parametr=context.parametr,
+                                             model_schema=context.model_schema,massivkey=context.massivkey)
+        return request.asset_validate_jsonschema(schema=context.schema, response=context.response)

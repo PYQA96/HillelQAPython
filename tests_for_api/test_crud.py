@@ -181,7 +181,7 @@ class Test_users_collection_edit_profile:
     def test_edits_users_settings(self, user, parametetr, obj_in_json, parametr_to_change, give_user_coockie,
                                   set_up_sample):
         set_up_sample.test_put_edits_user_settings(body=parametetr, headers=give_user_coockie,
-                                                   metod_validate="pydantic",
+                                                   metod_validate=False,
                                                    obj=obj_in_json, parametr=parametr_to_change,
                                                    model_schema=ApiResponse_setings,
                                                    expected_code=SUCSESSFUL_STATUS_CODE)

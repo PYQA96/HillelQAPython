@@ -1,4 +1,0 @@
-[32mINFO    [0m root:BASE_MODEL_REQUEST.py:35 Error in making request to https://qauto.forstudy.space/api/auth/signup: 400 Client Error: Bad Request for url: https://qauto.forstudy.space/api/auth/signup
-[32mINFO    [0m root:BASE_MODEL_REQUEST.py:36 Response content: {"status":"error","message":"Name is required"}
-[32mINFO    [0m root:ASERTATION_MODEL.py:12 resposnse: url=<Response [400]>
-[32mINFO    [0m root:ASERTATION_MODEL.py:38 Validation Pased
