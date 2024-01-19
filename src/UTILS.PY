@@ -145,3 +145,118 @@ json_schema_email_ok={
     },
     "required": ["status", "data"]
 }
+
+created_car_sucsessfull = {
+    "type": "object",
+    "properties": {
+        "status": {"type": "string", "enum": ["ok"]},
+        "data": {
+            "type": "object",
+            "properties": {
+                "id": {"type": "integer"},
+                "carBrandId": {"type": "integer"},
+                "carModelId": {"type": "integer"},
+                "initialMileage": {"type": "integer"},
+                "updatedMileageAt": {"type": "string", "format": "date-time"},
+                "carCreatedAt": {"type": "string", "format": "date-time"},
+                "mileage": {"type": "integer"},
+                "brand": {"type": "string"},
+                "model": {"type": "string"},
+                "logo": {"type": "string"}
+            },
+            "required": ["id", "carBrandId", "carModelId", "initialMileage", "updatedMileageAt", "carCreatedAt",
+                         "mileage", "brand", "model", "logo"]
+        }
+    },
+    "required": ["status", "data"]
+}
+
+created_car_not_crated = {
+    "type": "object",
+    "properties": {
+        "status": {"type": "string", "enum": ["error"]},
+        "message": {"type": "string","enum": ["Not authenticated"]},
+    },
+    "required": ["status", "message"]
+}
+
+sucsessful_masage_expenses_created={
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["ok"]
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "carId": {
+          "type": "integer"
+        },
+        "reportedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}$"
+        },
+        "liters": {
+          "type": "number"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "mileage": {
+          "type": "integer"
+        },
+        "totalCost": {
+          "type": "number"
+        }
+      },
+      "required": ["carId", "reportedAt", "liters", "id", "mileage", "totalCost"]
+    }
+  },
+  "required": ["status", "data"]
+}
+
+all_expenses ={
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["ok"]
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "carId": {
+            "type": "integer"
+          },
+          "reportedAt": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "mileage": {
+            "type": "integer"
+          },
+          "liters": {
+            "type": "integer"
+          },
+          "totalCost": {
+            "type": "integer"
+          }
+        },
+        "required": ["id", "carId", "reportedAt", "mileage", "liters", "totalCost"]
+      }
+    },
+    "currentPage": {
+      "type": "integer"
+    },
+    "totalItems": {
+      "type": "integer"
+    }
+  },
+  "required": ["status", "data", "currentPage", "totalItems"]
+}

@@ -1,23 +1,21 @@
 import pytest
-from src.conftest import user
-from src.Utils import *
-from src.base_model import *
-from src.pydantics_validators import *
+from src.ASERTATION_MODEL import Assertation_model_methods
+from src.UTILS import *
+from src.PYDANTICS_VALIDATORS import *
 
 
+@pytest.mark.usefixtures('set_up_sample')
 @pytest.mark.usefixtures('user')
 class Test_user_created:
 
     def test_create_user_sucsesfool(self, user):
-        print("-" * 50, TYPE_TEST_POSITIVE)
-        BaseModelRequest.assert_validate_status_code(user["status_code"], CREATED_STATUS_CODE), ERROR_MESAGES
-        BaseModelRequest.asset_validate_jsonschema(user["json"], json_schema_users_created_sucsess), ERROR_MESAGES
+        Assertation_model_methods(user["json"]).assert_validate_status_code(
+            user["status_code"], CREATED_STATUS_CODE).asset_validate_jsonschema(json_schema_users_created_sucsess,
+                                                                                user["json"])
 
-    def test_recreate_user(self, user):
-        print("-" * 50, TYPE_TEST_NEGATIVE)
-        request = BaseModelRequest(f"/auth/signup").make_request("post", body=user["payload"])
-        BaseModelRequest.asset_validate_jsonschema(request.json(), json_schema_users_fail)
-        BaseModelRequest.assert_validate_status_code(request.status_code, ERROR_STATUS_CODE_CREATED)
+    def test_recreate_user(self, user, set_up_sample):
+        set_up_sample.test_post_crate_user(body=user["payload"], schema=json_schema_users_fail,
+                                           expected_code=ERROR_STATUS_CODE_CREATED)
 
     @pytest.mark.parametrize("invalid_json,json_validation_schema,name",
                              [
@@ -69,65 +67,65 @@ class Test_user_created:
                                  )
                              ]
                              )
-    def test_validate_user_field(self, invalid_json, json_validation_schema, name):
-        print("-" * 50, TYPE_TEST_NEGATIVE)
-        request = BaseModelRequest('/auth/signup').make_request("post", body=invalid_json)
-        BaseModelRequest.asset_validate_jsonschema(json.loads(request.text), json_schema_users_fail)
-        BaseModelRequest.assert_validate_status_code(request.status_code, ERROR_STATUS_CODE_CREATED)
+    def test_validate_user_field(self, invalid_json, json_validation_schema, name, set_up_sample):
+        set_up_sample.test_post_crate_user(body=invalid_json, schema=json_validation_schema,
+                                           expected_code=ERROR_STATUS_CODE_CREATED)
 
 
+@pytest.mark.usefixtures('set_up_sample')
 @pytest.mark.usefixtures("user")
 class Test_users_collection_get_information:
 
-    @pytest.mark.parametrize("endpoint,method,code,shema",
+    @pytest.mark.parametrize("endpoint,code,shema",
                              [
-                                 ('/users/current', "get", SUCSESSFUL_STATUS_CODE, json_schema_users_created_sucsess),
-                                 ('/users/profile', "get", SUCSESSFUL_STATUS_CODE, json_schema_users_created_auth),
-                                 ('/users/settings', "get", SUCSESSFUL_STATUS_CODE, json_schema_users_settings)
+                                 ('test_get_auntificated_user_data', SUCSESSFUL_STATUS_CODE,
+                                  json_schema_users_created_sucsess),
+                                 ('test_get_auntificated_user_profile', SUCSESSFUL_STATUS_CODE,
+                                  json_schema_users_created_auth),
+                                 ('test_get_auntificated_user_settings', SUCSESSFUL_STATUS_CODE,
+                                  json_schema_users_settings)
                              ]
 
                              )
-    def test_get_methods_users(self, user, endpoint, method, code, shema):
-        print("-" * 50, TYPE_TEST_POSITIVE)
-        respons = BaseModelRequest(endpoint).make_request(method, headers=user["cookies"])
-        BaseModelRequest.assert_validate_status_code(respons.status_code, code)
-        BaseModelRequest.asset_validate_jsonschema(respons.json(), shema)
+    def test_get_methods_users(self, user, endpoint, code, shema, set_up_sample):
+        getattr(set_up_sample, endpoint)(headers=user["cookies"], expected_code=code, schema=shema)
 
-    @pytest.mark.parametrize("endpoint,method,code,shema,head",
+    @pytest.mark.parametrize("endpoint,code,shema,head",
                              [
-                                 ('/users/current', "get", EROR_STATUS_CODE_AUTH, json_schema_users_fail, headers_fake),
-                                 ('/users/current', "get", EROR_STATUS_CODE_AUTH, json_schema_users_fail, ""),
-                                 ('/users/current', "get", EROR_STATUS_CODE_AUTH, json_schema_users_fail, None),
-                                 ('/users/profile', "get", EROR_STATUS_CODE_AUTH, json_schema_users_fail,
+                                 ('test_get_auntificated_user_data', EROR_STATUS_CODE_AUTH, json_schema_users_fail,
                                   headers_fake),
-                                 ('/users/profile', "get", EROR_STATUS_CODE_AUTH, json_schema_users_fail, ""),
-                                 ('/users/profile', "get", EROR_STATUS_CODE_AUTH, json_schema_users_fail, None),
-                                 ('/users/settings', "get", EROR_STATUS_CODE_AUTH, json_schema_users_fail,
+                                 ('test_get_auntificated_user_profile', EROR_STATUS_CODE_AUTH, json_schema_users_fail,
+                                  ""),
+                                 ('test_get_auntificated_user_settings', EROR_STATUS_CODE_AUTH, json_schema_users_fail,
+                                  None),
+                                 ('test_get_auntificated_user_data', EROR_STATUS_CODE_AUTH, json_schema_users_fail,
                                   headers_fake),
-                                 ('/users/settings', "get", EROR_STATUS_CODE_AUTH, json_schema_users_fail, ""),
-                                 ('/users/settings', "get", EROR_STATUS_CODE_AUTH, json_schema_users_fail, None),
+                                 ('test_get_auntificated_user_profile', EROR_STATUS_CODE_AUTH, json_schema_users_fail,
+                                  ""),
+                                 ('test_get_auntificated_user_settings', EROR_STATUS_CODE_AUTH, json_schema_users_fail,
+                                  None),
+                                 ('test_get_auntificated_user_data', EROR_STATUS_CODE_AUTH, json_schema_users_fail,
+                                  headers_fake),
+                                 ('test_get_auntificated_user_profile', EROR_STATUS_CODE_AUTH, json_schema_users_fail,
+                                  ""),
+                                 ('test_get_auntificated_user_settings', EROR_STATUS_CODE_AUTH, json_schema_users_fail,
+                                  None),
 
                              ]
                              )
-    def test_negative_get_methods_users(self, endpoint, method, code, shema, head):
-        print("-" * 50, TYPE_TEST_NEGATIVE)
-        respons = BaseModelRequest(endpoint).make_request(method, headers=head)
-        BaseModelRequest.assert_validate_status_code(respons.status_code, code)
-        BaseModelRequest.asset_validate_jsonschema(respons.json(), shema)
+    def test_negative_get_methods_users(self, endpoint, code, shema, head, set_up_sample):
+        getattr(set_up_sample, endpoint)(headers=head, expected_code=code, schema=shema)
 
 
+@pytest.mark.usefixtures("give_user_coockie")
+@pytest.mark.usefixtures('set_up_sample')
 @pytest.mark.usefixtures("user")
 class Test_users_collection_edit_profile:
 
-    def test_edits_users_profile(self, user):
-        print("-" * 50, TYPE_TEST_POSITIVE)
-        headers = {
-            'Cookie': user["cookies"]["Cookie"],
-        }
-        request = BaseModelRequest('/users/profile').make_request("put", body=body_to_request_profile_edit,
-                                                                  headers=headers)
-        BaseModelRequest.asset_validate_jsonschema(request.json(), json_schema_users_updated)
-        BaseModelRequest.assert_validate_status_code(request.status_code, SUCSESSFUL_STATUS_CODE)
+    def test_edits_users_profile(self, set_up_sample, give_user_coockie):
+        set_up_sample.test_put_edits_user_profile(body=body_to_request_profile_edit, headers=give_user_coockie,
+                                                  schema=json_schema_users_updated,
+                                                  expected_code=SUCSESSFUL_STATUS_CODE)
 
     @pytest.mark.parametrize("parametetr,obj",
                              [
@@ -153,25 +151,15 @@ class Test_users_collection_edit_profile:
                                   }, "country")
                              ]
                              )
-    def test_edits_users_profile_parameters(self, user, parametetr, obj):
-        print("-" * 50, TYPE_TEST_NEGATIVE)
-        headers = {
-            'Cookie': user["cookies"]["Cookie"],
-        }
-        print(user["cookies"]["Cookie"])
-        response = BaseModelRequest('/users/profile').make_request("put", body=parametetr, headers=headers)
-        BaseModelRequest.validate_pydantic(response.json(), obj, ApiResponse)
-        BaseModelRequest.assert_validate_status_code(response.status_code, SUCSESSFUL_STATUS_CODE)
+    def test_edits_users_profile_parameters(self, parametetr, obj, give_user_coockie, set_up_sample):
+        set_up_sample.test_put_edits_user_profile(body=parametetr, headers=give_user_coockie, metod_validate="pydantic",
+                                                  obj=obj, model_schema=ApiResponse,
+                                                  expected_code=SUCSESSFUL_STATUS_CODE)
 
-    def test_edits_users_ettings(self, user):
-        print("-" * 50, TYPE_TEST_POSITIVE)
-        headers = {
-            'Cookie': user["cookies"]["Cookie"],
-        }
-        request = BaseModelRequest('/users/settings').make_request("put", body=body_to_request_users_settings,
-                                                                   headers=headers)
-        BaseModelRequest.asset_validate_jsonschema(request.json(), json_schema_profile_updated)
-        BaseModelRequest.assert_validate_status_code(request.status_code, SUCSESSFUL_STATUS_CODE)
+    def test_edits_users_ettings(self, give_user_coockie, set_up_sample):
+        set_up_sample.test_put_edits_user_settings(body=body_to_request_users_settings, headers=give_user_coockie,
+                                                   schema=json_schema_profile_updated,
+                                                   expected_code=SUCSESSFUL_STATUS_CODE)
 
     @pytest.mark.parametrize("parametetr,obj_in_json,parametr_to_change",
                              [
@@ -183,33 +171,22 @@ class Test_users_collection_edit_profile:
                                       "currency": "usd",
                                       "distanceUnits": "ml"
                                   }, "distanceUnits", "ml"),
+                                 ({
+                                      "currency": "uah",
+                                      "distanceUnits": "km"
+                                  }, ["currency", "distanceUnits"], ["uah", "km"]),
 
                              ]
                              )
-    def test_edits_users_settings(self, user, parametetr, obj_in_json, parametr_to_change):
-        print("-" * 50, TYPE_TEST_NEGATIVE)
-        headers = {
-            'Cookie': user["cookies"]["Cookie"],
-        }
-        response = BaseModelRequest('/users/settings').make_request("put", body=parametetr, headers=headers)
+    def test_edits_users_settings(self, user, parametetr, obj_in_json, parametr_to_change, give_user_coockie,
+                                  set_up_sample):
+        set_up_sample.test_put_edits_user_settings(body=parametetr, headers=give_user_coockie,
+                                                   metod_validate=False,
+                                                   obj=obj_in_json, parametr=parametr_to_change,
+                                                   model_schema=ApiResponse_setings,
+                                                   expected_code=SUCSESSFUL_STATUS_CODE)
 
-        BaseModelRequest.validate_pydantic(response.json(), obj_in_json, ApiResponse_setings, parametr_to_change)
-        BaseModelRequest.assert_validate_status_code(response.status_code, SUCSESSFUL_STATUS_CODE)
-
-
-    def test_change_user_email(self, user):
-        print("-" * 50, TYPE_TEST_POSITIVE)
-        headers = {
-            'Cookie': user["cookies"]["Cookie"],
-        }
-        body_to_request_change_email = {
-            "email": f'{random_word}@test.com',
-            "password": user["payload"]["password"]
-        }
-
-        request = BaseModelRequest('/users/email').make_request("put", body=body_to_request_change_email,
-                                                                   headers=headers)
-        BaseModelRequest.asset_validate_jsonschema(request.json(), json_schema_email_ok)
-        BaseModelRequest.assert_validate_status_code(request.status_code, SUCSESSFUL_STATUS_CODE)
-
-
+    @pytest.mark.usefixtures('give_user_body')
+    def test_change_user_email(self, give_user_body, set_up_sample, give_user_coockie):
+        set_up_sample.test_put_edits_user_email(body=give_user_body, headers=give_user_coockie,
+                                                expected_code=SUCSESSFUL_STATUS_CODE, schema=json_schema_email_ok)
