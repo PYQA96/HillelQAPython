@@ -1,19 +1,14 @@
 import pytest
 from src.BASE_MODEL_REQUEST import BaseModelRequest, RequestContext
+from src.Data_generators.Generators import User_generator
 from src.UTILS import *
 from src.TEST_MODEL_OBJECT import User_Api, Cars, Expension
 from datetime import datetime
 
+
 @pytest.fixture(scope="module")
 def user():
-    letters = string.ascii_lowercase
-    payload = {
-        "name": "John",
-        "lastName": "Dou",
-        "email": f"{''.join(random.choice(letters) for _ in range(6))}@gmail.com",
-        "password": f"111wWw111",
-        "repeatPassword": f"111wWw111"
-    }
+    payload = User_generator().user_sign_up_data()
     context = RequestContext(
         endpoint='/auth/signup',
         body=payload,
@@ -27,7 +22,7 @@ def user():
             "status_code": r.status_code,
             "payload": payload
         }
-        return dict_user
+        yield dict_user
     except Exception as e:
         raise RuntimeError(f"Failed to create user: {e}")
 
