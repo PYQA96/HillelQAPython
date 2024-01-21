@@ -5,8 +5,8 @@ import allure
 class User_Api(BaseModelRequest):
 
     @allure.step("sign_up endpoint={endpoint} method={method} body={body}")
-    def test_post_crate_user(self, headers, endpoint="/auth/signup", method="post", **kwargs):
-        context = RequestContext(endpoint=endpoint, headers=headers, method=method, **kwargs)
+    def test_post_crate_user(self,  endpoint="/auth/signup", method="post", **kwargs):
+        context = RequestContext(endpoint=endpoint,  method=method, **kwargs)
         return self.create_request(context)
 
     @allure.step("auntificated_user_data endpoint={endpoint} method={method} headers={headers}")

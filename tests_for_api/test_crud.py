@@ -7,10 +7,10 @@ from src.PYDANTICS_VALIDATORS import *
 @pytest.mark.usefixtures('set_up_sample')
 @pytest.mark.usefixtures('user')
 class Test_user_created:
-
+    @pytest.mark.Smok
     def test_create_user_sucsesfool(self, user):
         Assertation_model_methods(user["json"]).assert_validate_status_code(
-            user["status_code"], CREATED_STATUS_CODE).asset_validate_jsonschema(json_schema_users_created_sucsess,
+            CREATED_STATUS_CODE,user["status_code"]).asset_validate_jsonschema(json_schema_users_created_sucsess,
                                                                                 user["json"])
 
     def test_recreate_user(self, user, set_up_sample):

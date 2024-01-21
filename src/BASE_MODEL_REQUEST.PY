@@ -1,5 +1,5 @@
 import os
-
+import urllib.parse
 import requests
 import logging
 import allure
@@ -48,6 +48,7 @@ class BaseModelRequest:
             raise Method_error(f"This method is incorrect, method mustbe in {methods}: your method {method}")
 
         try:
+
             endpoint = f"{self.baseurl}{endpoint}"
             response = getattr(requests, method.lower())(endpoint, headers=headers, params=params, json=body)
             response.raise_for_status()
