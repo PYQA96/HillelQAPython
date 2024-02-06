@@ -1,6 +1,4 @@
-import string
 import random as e
-from collections import OrderedDict
 from string import ascii_lowercase as letters
 from faker import Faker
 
