@@ -1,5 +1,4 @@
 import os
-import urllib.parse
 import requests
 import logging
 import allure
@@ -15,8 +14,8 @@ class Method_error(Exception):
 
 class RequestContext:
     def __init__(self, endpoint, method, schema=None, expected_code=None, response=None, actual_code=None,
-                 params=None, headers=None, body=None, log_errors=None, metod_validate=True, obj=None,
-                 parametr=None, model_schema=None, ids=None, massivkey='data'):
+                 params=None, headers=None, body=None, log_errors=None, metod_validate=True, key=None,
+                 value=None, model_schema=None, ids=None, massivkey=None):
         self.endpoint = endpoint
         self.method = method
         self.schema = schema
@@ -28,8 +27,8 @@ class RequestContext:
         self.body = body
         self.log_errors = log_errors
         self.metod_validate = metod_validate
-        self.obj = obj
-        self.parametr = parametr
+        self.key = key
+        self.value = value
         self.model_schema = model_schema
         self.ids = ids
         self.massivkey =massivkey
@@ -78,8 +77,11 @@ class BaseModelRequest:
                                       headers=context.headers, body=context.body,
                                       logining_errors=context.log_errors)
         request = Assertation_model_methods(request).assert_validate_status_code(actual_code=context.actual_code,
-                                                                                 expected_code=context.expected_code)
+                                                                                 expected_code=context.expected_code).params_equal(
+            key=context.key, value=context.value, massivkey=context.massivkey)
         if not context.metod_validate:
-            return request.validate_pydantic(obj=context.obj, parametr=context.parametr,
-                                             model_schema=context.model_schema,massivkey=context.massivkey)
+            # return request.validate_pydantic(key=context.key, value=context.value,
+            #                                  model_schema=context.model_schema,massivkey=context.massivkey)
+            return request.validate_pydantic(
+                                         model_schema=context.model_schema)
         return request.asset_validate_jsonschema(schema=context.schema, response=context.response)

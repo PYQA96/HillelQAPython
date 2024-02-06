@@ -1,7 +1,9 @@
 import pytest
 from src.ASERTATION_MODEL import Assertation_model_methods
+from src.Data_generators.Generators import User_generator
 from src.UTILS import *
 from src.PYDANTICS_VALIDATORS import *
+
 
 
 @pytest.mark.usefixtures('set_up_sample')
@@ -20,47 +22,27 @@ class Test_user_created:
     @pytest.mark.parametrize("invalid_json,json_validation_schema,name",
                              [
                                  (
-                                         {
-                                             "lastName": "Dou",
-                                             "email": f"{random_word}@gmail.com",
-                                             "password": f'111wWw111',
-                                             "repeatPassword": f"111wWw111"
-                                         },
+                                         User_generator().last_Name().email().password().repeat_Password().cusstom_bild(),
                                          json_schema_users_fail,
                                          "without_name"
                                  ), (
-                                     {
-                                         "name": "John",
-                                         "email": f"{random_word}@gmail.com",
-                                         "password": f'111wWw111',
-                                         "repeatPassword": f"111wWw111"
-                                     },
-                                     json_schema_users_fail,
-                                     "without_lastName"
+                                         User_generator().name().email().password().repeat_Password().cusstom_bild(),
+                                         json_schema_users_fail,
+                                         "without_lastName"
                              ),
                                  (
-                                         {
-                                             "name": "John",
-                                             "lastName": "Dou",
-                                             "password": f'111wWw111',
-                                             "repeatPassword": f"111wWw111"
-                                         },
+                                         User_generator().name().last_Name().password().repeat_Password().cusstom_bild(),
                                          json_schema_users_fail,
                                          "without_email"
                                  ),
                                  (
-                                         {
-                                             "name": "John",
-                                             "lastName": "Dou",
-                                             "email": f"{random_word}@gmail.com",
-                                             "repeatPassword": f"111wWw111"
-                                         },
+                                         User_generator().name().last_Name().repeat_Password().cusstom_bild(),
                                          json_schema_users_fail,
                                          "without_password"
                                  ),
                                  (
                                          {
-                                             "": "",
+                                             None: None,
                                          },
                                          json_schema_users_fail,
                                          "without_email"
@@ -68,6 +50,7 @@ class Test_user_created:
                              ]
                              )
     def test_validate_user_field(self, invalid_json, json_validation_schema, name, set_up_sample):
+        print(invalid_json)
         set_up_sample.test_post_crate_user(body=invalid_json, schema=json_validation_schema,
                                            expected_code=ERROR_STATUS_CODE_CREATED)
 
@@ -127,7 +110,7 @@ class Test_users_collection_edit_profile:
                                                   schema=json_schema_users_updated,
                                                   expected_code=SUCSESSFUL_STATUS_CODE)
 
-    @pytest.mark.parametrize("parametetr,obj",
+    @pytest.mark.parametrize("parametetr,key",
                              [
                                  ({
                                       "photo": "Notest.jpg",
@@ -151,9 +134,9 @@ class Test_users_collection_edit_profile:
                                   }, "country")
                              ]
                              )
-    def test_edits_users_profile_parameters(self, parametetr, obj, give_user_coockie, set_up_sample):
-        set_up_sample.test_put_edits_user_profile(body=parametetr, headers=give_user_coockie, metod_validate="pydantic",
-                                                  obj=obj, model_schema=ApiResponse,
+    def test_edits_users_profile_parameters(self, parametetr,  give_user_coockie, set_up_sample,key):
+        set_up_sample.test_put_edits_user_profile(body=parametetr, headers=give_user_coockie, metod_validate=True,
+                                                  model_schema=ApiResponse,
                                                   expected_code=SUCSESSFUL_STATUS_CODE)
 
     def test_edits_users_ettings(self, give_user_coockie, set_up_sample):
@@ -182,7 +165,7 @@ class Test_users_collection_edit_profile:
                                   set_up_sample):
         set_up_sample.test_put_edits_user_settings(body=parametetr, headers=give_user_coockie,
                                                    metod_validate=False,
-                                                   obj=obj_in_json, parametr=parametr_to_change,
+                                                   key=obj_in_json, value=parametr_to_change,massivkey="data",
                                                    model_schema=ApiResponse_setings,
                                                    expected_code=SUCSESSFUL_STATUS_CODE)
 

@@ -12,7 +12,7 @@ class Test_cars:
 
     def test_create(self, created_car):
         Assertation_model_methods(created_car.get("json")).assert_validate_status_code(created_car.get("status_code"),
-                                                                                       CREATED_STATUS_CODE).asset_validate_jsonschema(
+                                                                                       CREATED_STATUS_CODE).params_equal(key="carBrandId",value=1,massivkey="data").asset_validate_jsonschema(
             schema=created_car_sucsessfull, response=created_car.get("json"))
 
     @pytest.mark.parametrize(f"body,massiv_key,obj_in_massiv",
@@ -33,13 +33,13 @@ class Test_cars:
                                          {
                                              "carBrandId": 1,
                                              "carModelId": 1,
-                                         }, "message", "incorect"
+                                         }, "message", "Mileage is required"
                                  )
                              ]
                              )
     def test_created_user_with_incorected_params(self, set_up_car, created_car, body, obj_in_massiv, massiv_key, user):
         set_up_car.test_post_create_a_new_car(headers=user.get("cookies"), body=body, metod_validate=False,
-                                              model_schema=ApiResponseCar, obj=obj_in_massiv, massivkey=massiv_key)
+                                              model_schema=ApiResponseCar,key=massiv_key,value=obj_in_massiv)
 
     def test_gets_car_barnd(self, set_up_car, created_car):
         set_up_car.test_get_car_brend(headers=created_car.get("cookies"), expected_code=SUCSESSFUL_STATUS_CODE)

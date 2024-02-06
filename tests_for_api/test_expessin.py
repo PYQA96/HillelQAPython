@@ -61,7 +61,7 @@ class Test_Expensiv:
                                                              user):
         with erorr:
             set_up_expensive.test_post_create_a_expenses(body=boby, headers=user.get("cookies"), metod_validate=False,
-                                                         model_schema=ApiResponseCar, obj=parametr, massivkey=obj)
+                                                         model_schema=ApiResponseCar)
 
     def test_get_all_expenses(self, user, set_up_expensive):
         set_up_expensive.test_get_all_expenses(headers=user.get("cookies"), expected_code=SUCSESSFUL_STATUS_CODE,

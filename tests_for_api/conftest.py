@@ -1,10 +1,11 @@
 import pytest
-from src.BASE_MODEL_REQUEST import BaseModelRequest, RequestContext
-from src.Data_generators.Generators import User_generator
+
 from src.UTILS import *
+from src.Data_generators.Generators import User_generator
+
 from src.TEST_MODEL_OBJECT import User_Api, Cars, Expension
 from datetime import datetime
-
+from src.BASE_MODEL_REQUEST import BaseModelRequest, RequestContext
 
 @pytest.fixture(scope="module")
 def user():
@@ -72,7 +73,6 @@ def created_car(user):
     )
     try:
         r = BaseModelRequest().create_request(context)
-        print(r)
         dict_car = {
             "json": r.json(),
             "cookies": {'Cookie': f"sid={r.cookies.get('sid')}"},
