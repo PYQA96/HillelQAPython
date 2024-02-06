@@ -2,7 +2,7 @@ import os
 import requests
 import logging
 import allure
-from src.ASERTATION_MODEL import Assertation_model_methods
+from sources.ASERTATION_MODEL import Assertation_model_methods
 from dotenv import load_dotenv
 
 

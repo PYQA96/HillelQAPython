@@ -1,11 +1,11 @@
 import pytest
 
-from src.UTILS import *
-from src.Data_generators.Generators import User_generator
+from sources.UTILS import *
+from sources.Data_generators.Generators import User_generator
 
-from src.TEST_MODEL_OBJECT import User_Api, Cars, Expension
+from sources.TEST_MODEL_OBJECT import User_Api, Cars, Expension
 from datetime import datetime
-from src.BASE_MODEL_REQUEST import BaseModelRequest, RequestContext
+from sources.BASE_MODEL_REQUEST import BaseModelRequest, RequestContext
 
 @pytest.fixture(scope="module")
 def user():

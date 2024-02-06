@@ -1,6 +1,6 @@
 import jsonschema
 from pydantic import ValidationError
-from src.UTILS import *
+from sources.UTILS import *
 import logging
 import allure
 

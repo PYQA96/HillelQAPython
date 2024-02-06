@@ -1,8 +1,8 @@
 import pytest
-from src.ASERTATION_MODEL import Assertation_model_methods
-from src.UTILS import *
-from src.PYDANTICS_VALIDATORS import *
-from src.STATIC_METHODS import StatisMethod
+from sources.ASERTATION_MODEL import Assertation_model_methods
+from sources.UTILS import *
+from sources.PYDANTICS_VALIDATORS import *
+from sources.STATIC_METHODS import StatisMethod
 
 
 @pytest.mark.usefixtures('set_up_car')

@@ -1,4 +1,4 @@
-from src.BASE_MODEL_REQUEST import BaseModelRequest, RequestContext
+from sources.BASE_MODEL_REQUEST import BaseModelRequest, RequestContext
 import allure
 
 
