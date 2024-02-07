@@ -1,5 +1,5 @@
 import pytest
-from sources.ASERTATION_MODEL import Assertation_model_methods
+from ..sources.ASERTATION_MODEL import Assertation_model_methods
 from sources.Data_generators.Generators import User_generator
 from sources.UTILS import *
 from sources.PYDANTICS_VALIDATORS import *

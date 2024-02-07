@@ -6,6 +6,8 @@ WORKDIR /HillelQAPython
 
 COPY . .
 
-RUN pip3 install  -r requiments.txt
+RUN pip3 install -r requirements.txt
+RUN pip install -e .
+
 
 CMD pytest -v HillelQAPython/tests_for_api/*
