@@ -1,11 +1,13 @@
 import pytest
+import sys
 
-from sources.UTILS import *
 from sources.Data_generators.Generators import User_generator
-
-from sources.TEST_MODEL_OBJECT import User_Api, Cars, Expension
+from sources.base_model_request import BaseModelRequest, RequestContext
+from sources.test_model_object import User_Api, Cars, Expension
 from datetime import datetime
-from sources.BASE_MODEL_REQUEST import BaseModelRequest, RequestContext
+
+from sources.utils import random_word
+
 
 @pytest.fixture(scope="module")
 def user():

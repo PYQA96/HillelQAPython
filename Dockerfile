@@ -4,10 +4,9 @@ LABEL "Automation"="Python with my framework"
 
 WORKDIR /HillelQAPython
 
-COPY . .
 
 RUN pip3 install -r requirements.txt
-RUN pip install -e .
 
+COPY . .
 
-CMD pytest -v HillelQAPython/tests_for_api/*
+CMD pytest -v HillelQAPython/tests_for_api
